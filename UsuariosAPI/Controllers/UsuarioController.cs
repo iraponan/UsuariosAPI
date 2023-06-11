@@ -25,8 +25,8 @@ namespace UsuariosAPI.Controllers {
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUsuarioDto dto) {
-            await _usuarioService.Login(dto);
-            return Ok("Usuário " + dto.UserName + " autenticado!");
+            string? token  = await _usuarioService.Login(dto);
+            return Ok(token);
         }
     }
 }

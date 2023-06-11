@@ -25,13 +25,17 @@ namespace UsuariosAPI.Services {
             }
         }
 
-        internal async Task Login(LoginUsuarioDto dto) {
+        internal async Task<string> Login(LoginUsuarioDto dto) {
             SignInResult resultado = await _signInManager.PasswordSignInAsync(dto.UserName, dto.Senha, false, false);
             if (!resultado.Succeeded) {
                 throw new ApplicationException("Usuário não autenticado!");
             }
 
-            
+            Usuario? usuario = _signInManager.UserManager.Users.FirstOrDefault(user => user.NormalizedUserName == dto.UserName.ToUpper());
+
+            string? token = _tokenService.GenerateToken(usuario);
+
+            return token;
         }
     }
 }

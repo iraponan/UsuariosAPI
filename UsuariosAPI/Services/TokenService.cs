@@ -6,7 +6,7 @@ using UsuariosAPI.Models;
 
 namespace UsuariosAPI.Services {
     public class TokenService {
-        public void GenerateToken(Usuario usuario) {
+        public String GenerateToken(Usuario usuario) {
             Claim[] claims = new Claim[] { 
                 new Claim("username", usuario.UserName),
                 new Claim("id", usuario.Id),
@@ -17,11 +17,13 @@ namespace UsuariosAPI.Services {
 
             SigningCredentials signingCredentials = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
+            JwtSecurityToken token = new JwtSecurityToken(
                     expires : DateTime.Now.AddMinutes(10),
                     claims : claims,
                     signingCredentials : signingCredentials
                 );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
